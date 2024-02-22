@@ -1,23 +1,24 @@
+# Article.py
 
 
 class Article:
-    all_articles = []
+    _all_articles = []
 
     def __init__(self, author, magazine, title):
-        self.author = author
-        self.magazine = magazine
-        self.article_title = title
-        Article.all_articles.append(self)
+        self._author = author
+        self._magazine = magazine
+        self._title = title
+        Article._all_articles.append(self)
 
-    def get_title(self):
-        return self.article_title
+    def title(self):
+        return self._title
 
-    def get_author(self):
-        return self.author
+    def author(self):
+        return self._author
 
-    def get_magazine(self):
-        return self.magazine
+    def magazine(self):
+        return self._magazine
 
     @classmethod
-    def get_all(cls):
-        return cls.all_articles
+    def all(cls):
+        return cls._all_articles

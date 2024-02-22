@@ -1,39 +1,40 @@
+# Magazine.py
 
 
 class Magazine:
-    all_magazines = []
+    _all_magazines = []
 
     def __init__(self, name, category):
-        self.magazine_name = name
-        self.category_name = category
-        Magazine.all_magazines.append(self)
+        self._name = name
+        self._category = category
+        self._articles = []
+        Magazine._all_magazines.append(self)
 
-    def get_name(self):
-        return self.magazine_name
+    def name(self):
+        return self._name
 
-    def get_category(self):
-        return self.category_name
+    def category(self):
+        return self._category
 
-    @classmethod
-    def get_all(cls):
-        return cls.all_magazines
+    def all():
+        return Magazine._all_magazines
+
+    def contributors(self):
+        return list(set(article.author() for article in self._articles))
+
+    def add_article(self, author, title):
+        new_article = Article(author, self, title)
+        self._articles.append(new_article)
+        return new_article
 
     @classmethod
     def find_by_name(cls, name):
-        for magazine in cls.all_magazines:
-            if magazine.get_name() == name:
-                return magazine
-        return None
+        return next((magazine for magazine in cls._all_magazines if magazine.name() == name), None)
 
     @classmethod
-    def article_titles(cls, magazine):
-        return [article.get_title() for article in Article.get_all() if article.get_magazine() == magazine]
+    def article_titles(cls):
+        return [article.title() for magazine in cls._all_magazines for article in magazine._articles]
 
     @classmethod
-    def contributing_authors(cls, magazine):
-        authors_dict = {}
-        for article in Article.get_all():
-            if article.get_magazine() == magazine:
-                author = article.get_author()
-                authors_dict[author] = authors_dict.get(author, 0) + 1
-        return [author for author, count in authors_dict.items() if count > 2]
+    def contributing_authors(cls):
+        return [author for magazine in cls._all_magazines for author in magazine.contributors() if len(author.articles()) > 2]
